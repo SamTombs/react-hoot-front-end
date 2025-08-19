@@ -1,8 +1,6 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router';
-
 import { signUp } from '../../services/authService';
-
 import { UserContext } from '../../contexts/UserContext';
 
 const SignUpForm = () => {
@@ -17,16 +15,18 @@ const SignUpForm = () => {
 
   const { username, password, passwordConf } = formData;
 
-  const handleChange = (evt) => {
+  const handleChange = (event) => {
     setMessage('');
-    setFormData({ ...formData, [evt.target.name]: evt.target.value });
+    setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = async (evt) => {
-    evt.preventDefault();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       const newUser = await signUp(formData);
       setUser(newUser);
+      console.log(formData)
       navigate('/');
     } catch (err) {
       setMessage(err.message);

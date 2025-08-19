@@ -1,8 +1,6 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router';
-
 import { signIn } from '../../services/authService';
-
 import { UserContext } from '../../contexts/UserContext';
 
 const SignInForm = () => {
@@ -14,13 +12,13 @@ const SignInForm = () => {
     password: '',
   });
 
-  const handleChange = (evt) => {
+  const handleChange = (event) => {
     setMessage('');
-    setFormData({ ...formData, [evt.target.name]: evt.target.value });
+    setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = async (evt) => {
-    evt.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       const signedInUser = await signIn(formData);
       setUser(signedInUser);
