@@ -32,6 +32,18 @@ const App = () => {
     navigate("/hoots");
   };
 
+  const handleDeleteHoot = async (hootId) => {
+    const deletedHoot = await hootService.deleteHoot(hootId);
+    console.log("hootID", hootId);
+    setHoots(hoots.filter((hoot) => hoot._id !== deletedHoot._id));
+    navigate("/hoots");
+    console.log(deletedHoot);
+  };
+
+  const handleUpdateHoot = async (hootId) => {
+    console.log("Updated HOOT");
+  };
+
   return (
     <>
       <NavBar />
@@ -40,11 +52,20 @@ const App = () => {
         {user ? (
           <>
             <Route path="/hoots" element={<HootList hoots={hoots} />} />
-            <Route path="/hoots/:hootId" element={<HootDetails />} />
+            <Route
+              path="/hoots/:hootId"
+              element={
+                <HootDetails
+                  handleDeleteHoot={handleDeleteHoot}
+                  handleUpdateHoot={handleUpdateHoot}
+                />
+              }
+            />
             <Route
               path="/hoots/new"
               element={<HootForm handleAddHoot={handleAddHoot} />}
             />
+            <Route path="/hoots/:hootId/edit" element={<HootForm />} />
           </>
         ) : (
           <>
@@ -58,7 +79,6 @@ const App = () => {
 };
 
 export default App;
-
 
 // As the author of a hoot, I should see a link to ‘Edit’ a hoot on the ‘Details’ page. Clicking on the link should direct me to an ‘Edit’ page where I can modify the hoot. Upon submitting the update, I should be redirected back to the ‘Details’ page.
 // As the author of a hoot, I should see a button to ‘Delete’ a hoot on the ‘Details’ page. Clicking the button should delete the hoot and redirect me back to the ‘List’ page.

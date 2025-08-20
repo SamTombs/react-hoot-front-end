@@ -41,15 +41,40 @@ const create = async (hootFormData) => {
 
 const createComment = async (hootId, commentFormData) => {
   try {
-    const res = await axios.post(`${BASE_URL}/${hootId}/comments`, commentFormData, {
+    const res = await axios.post(
+      `${BASE_URL}/${hootId}/comments`,
+      commentFormData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log("ERROR IN CREATE COMMENT");
+  }
+};
+
+const updateHoot = async (updateFormData, hootId) => {
+  try {
+    const res = await axios.put(`${BASE_URL}/${hootId}`, updateFormData)
+  } catch (error) {
+    console.log("UPDATE ERROR")
+  }
+}
+
+const deleteHoot = async (hootId) => {
+  try {
+    const res = await axios.delete(`${BASE_URL}/${hootId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    return res.data
+    return res.data;
   } catch (error) {
-    console.log("ERROR IN CREATE COMMENT")
+    console.log("Error")
   }
 };
 
-export { index, show, create, createComment };
+export { index, show, create, createComment, deleteHoot, updateHoot };

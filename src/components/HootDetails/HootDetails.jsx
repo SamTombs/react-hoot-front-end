@@ -1,11 +1,13 @@
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router";
 import * as hootService from "../../services/hootService";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import CommentForm from "../CommentForm/CommentForm";
+import { UserContext } from "../../contexts/UserContext";
 
-const HootDetails = () => {
+const HootDetails = ({ handleDeleteHoot }) => {
   const [hoot, setHoot] = useState(null);
   const { hootId } = useParams();
+  const { user } = useContext(UserContext);
   console.log("HOOT ID", hootId);
 
   useEffect(() => {
@@ -17,9 +19,9 @@ const HootDetails = () => {
   }, [hootId]);
 
   const handleAddComment = async (commentFormData) => {
-    const newComment = await hootService.createComment(hootId, commentFormData)
-    setHoot({ ...hoot, comments: [...hoot.comments, newComment]})
-  }
+    const newComment = await hootService.createComment(hootId, commentFormData);
+    setHoot({ ...hoot, comments: [...hoot.comments, newComment] });
+  };
 
   if (!hoot) return <main>Loading...</main>;
   return (
@@ -32,12 +34,18 @@ const HootDetails = () => {
             {`${hoot.author.username} posted on
             ${new Date(hoot.createdAt).toLocaleDateString()}`}
           </p>
+          {hoot.author._id === user._id && (
+            <>
+              <Link to={`hoots/${hootId}/edit`}>Edit</Link>
+              <button onClick={() => handleDeleteHoot(hootId)}>Delete</button>
+            </>
+          )}
         </header>
         <p>{hoot.text}</p>
       </section>
       <section>
         <h2>Comments</h2>
-        <CommentForm handleAddComment={handleAddComment}/>
+        <CommentForm handleAddComment={handleAddComment} />
         {!hoot.comments.length && <p>There are no comments.</p>}
 
         {hoot.comments.map((comment) => (
