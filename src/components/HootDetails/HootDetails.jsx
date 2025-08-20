@@ -8,7 +8,6 @@ const HootDetails = ({ handleDeleteHoot }) => {
   const [hoot, setHoot] = useState(null);
   const { hootId } = useParams();
   const { user } = useContext(UserContext);
-  console.log("HOOT ID", hootId);
 
   useEffect(() => {
     const fetchHoot = async () => {
@@ -36,7 +35,7 @@ const HootDetails = ({ handleDeleteHoot }) => {
           </p>
           {hoot.author._id === user._id && (
             <>
-              <Link to={`hoots/${hootId}/edit`}>Edit</Link>
+              <Link to={`/hoots/${hootId}/edit`}>Edit</Link>
               <button onClick={() => handleDeleteHoot(hootId)}>Delete</button>
             </>
           )}

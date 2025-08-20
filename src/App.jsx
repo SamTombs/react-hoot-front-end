@@ -34,14 +34,15 @@ const App = () => {
 
   const handleDeleteHoot = async (hootId) => {
     const deletedHoot = await hootService.deleteHoot(hootId);
-    console.log("hootID", hootId);
     setHoots(hoots.filter((hoot) => hoot._id !== deletedHoot._id));
     navigate("/hoots");
-    console.log(deletedHoot);
+    console.log(hoots._id);
   };
 
-  const handleUpdateHoot = async (hootId) => {
-    console.log("Updated HOOT");
+  const handleUpdateHoot = async (hootId, hootFormData) => {
+    const updatedHoot = await hootService.updateHoot(hootId, hootFormData);
+    setHoots(hoots.map((hoot) => (hootId === hoot._id ? updatedHoot : hoot)));
+    navigate(`/hoots/${hootId}`);
   };
 
   return (
@@ -54,18 +55,16 @@ const App = () => {
             <Route path="/hoots" element={<HootList hoots={hoots} />} />
             <Route
               path="/hoots/:hootId"
-              element={
-                <HootDetails
-                  handleDeleteHoot={handleDeleteHoot}
-                  handleUpdateHoot={handleUpdateHoot}
-                />
-              }
+              element={<HootDetails handleDeleteHoot={handleDeleteHoot} />}
             />
             <Route
               path="/hoots/new"
               element={<HootForm handleAddHoot={handleAddHoot} />}
             />
-            <Route path="/hoots/:hootId/edit" element={<HootForm />} />
+            <Route
+              path="/hoots/:hootId/edit"
+              element={<HootForm handleUpdateHoot={handleUpdateHoot} />}
+            />
           </>
         ) : (
           <>

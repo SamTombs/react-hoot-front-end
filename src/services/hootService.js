@@ -56,13 +56,19 @@ const createComment = async (hootId, commentFormData) => {
   }
 };
 
-const updateHoot = async (updateFormData, hootId) => {
+const updateHoot = async (hootId, updateFormData) => {
   try {
-    const res = await axios.put(`${BASE_URL}/${hootId}`, updateFormData)
+    const res = await axios.put(`${BASE_URL}/${hootId}`, updateFormData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    console.log("hootId about to send:", hootId, typeof hootId);
+    return res.data;
   } catch (error) {
-    console.log("UPDATE ERROR")
+    console.log("UPDATE ERROR");
   }
-}
+};
 
 const deleteHoot = async (hootId) => {
   try {
@@ -73,7 +79,7 @@ const deleteHoot = async (hootId) => {
     });
     return res.data;
   } catch (error) {
-    console.log("Error")
+    console.log("Error");
   }
 };
 
